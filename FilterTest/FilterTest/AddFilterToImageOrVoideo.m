@@ -11,6 +11,7 @@
 @implementation AddFilterToImageOrVoideo {
     GPUImageMovie *moviefile;
     GPUImageMovieWriter *videoCamera;
+    AVAssetExportSession *_exportSession;
 }
 
 
@@ -80,8 +81,9 @@
     moviefile.playAtActualSpeed = NO;
     id stillImageFilter = [self getGPUImageFilterByType:type];
     [moviefile addTarget:stillImageFilter];
-    unlink([exportPath UTF8String]);
-    NSURL *movieURL = [NSURL fileURLWithPath:exportPath];
+    NSString *outPutPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/bigMovie.mov"];
+    unlink([outPutPath UTF8String]);
+    NSURL *movieURL = [NSURL fileURLWithPath:outPutPath];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
     NSArray *assetVideoTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
     if (assetVideoTracks.count <= 0)
@@ -102,20 +104,23 @@
     [videoCamera startRecording];
     [moviefile startProcessing];
     __unsafe_unretained typeof(videoCamera) weakVideoCamera = videoCamera;
+    __unsafe_unretained typeof(self) weakSelf = self;
     [videoCamera setCompletionBlock:^{
         if ((NSNull*)stillImageFilter != [NSNull null] && stillImageFilter != nil)
         {
             [stillImageFilter removeTarget:weakVideoCamera];
-            [moviefile removeTarget:stillImageFilter];
+//            [moviefile removeTarget:stillImageFilter];
         }
         else
         {
             [stillImageFilter removeTarget:weakVideoCamera];
         }
+        
         [weakVideoCamera finishRecordingWithCompletionHandler:^{
             
             // Closer timer
-            complete(YES);
+            unlink([exportPath UTF8String]);
+            [weakSelf compressVideoToMP4WithInputUrl:movieURL outPutFiled:exportPath compelete:complete];
         }];
     }];
     
@@ -126,6 +131,144 @@
 
 
 }
+
+
+- (void) compressVideoToMP4WithInputUrl:(NSURL *)inputVideoURL outPutFiled:(NSString *)exportVideoFile compelete:(compeleteFiltering)compelete {
+    if (!inputVideoURL || ![inputVideoURL isFileURL] || !exportVideoFile || [exportVideoFile isEqualToString:@""])
+    {
+        NSLog(@"Input filename or Output filename is invalied for convert to Mp4!");
+        return ;
+    }
+
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:inputVideoURL options:nil];
+    NSParameterAssert(asset);
+    if(asset ==nil || [[asset tracksWithMediaType:AVMediaTypeVideo] count]<1)
+    {
+        NSLog(@"Input video is invalid!");
+        return ;
+    }
+    
+    AVMutableComposition *composition = [AVMutableComposition composition];
+    AVMutableCompositionTrack *videoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    NSArray *assetVideoTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+    if (assetVideoTracks.count <= 0)
+    {
+        // Retry once
+        if (asset)
+        {
+            asset = nil;
+        }
+        
+        asset = [[AVURLAsset alloc] initWithURL:inputVideoURL options:nil];
+        assetVideoTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+        if ([assetVideoTracks count] <= 0)
+        {
+            if (asset)
+            {
+                asset = nil;
+            }
+            
+            NSLog(@"Error reading the transformed video track");
+            return ;
+        }
+    }
+    
+    // 3. Insert the tracks in the composition's tracks
+    AVAssetTrack *assetVideoTrack = [assetVideoTracks firstObject];
+    [videoTrack insertTimeRange:assetVideoTrack.timeRange ofTrack:assetVideoTrack atTime:CMTimeMake(0, 1) error:nil];
+    [videoTrack setPreferredTransform:assetVideoTrack.preferredTransform];
+    
+    if ([[asset tracksWithMediaType:AVMediaTypeAudio] count]>0)
+    {
+        AVAssetTrack *assetAudioTrack = [[asset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
+        [audioTrack insertTimeRange:assetAudioTrack.timeRange ofTrack:assetAudioTrack atTime:CMTimeMake(0, 1) error:nil];
+    }
+    else
+    {
+        NSLog(@"Reminder: video hasn't audio!");
+    }
+    
+    
+    NSString *mp4Quality = AVAssetExportPresetMediumQuality; //AVAssetExportPresetPassthrough
+    NSString *exportPath = exportVideoFile;
+    NSURL *exportUrl = [NSURL fileURLWithPath:exportPath];
+    
+    _exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:mp4Quality];
+    _exportSession.outputURL = exportUrl;
+    _exportSession.outputFileType = [[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0 ? AVFileTypeMPEG4 : AVFileTypeQuickTimeMovie;
+    
+    _exportSession.shouldOptimizeForNetworkUse = YES;
+    
+    [_exportSession exportAsynchronouslyWithCompletionHandler:^{
+        switch ([_exportSession status])
+        {
+            case AVAssetExportSessionStatusCompleted:
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    // Close timer
+                    compelete(YES);
+                    
+                                     // Write to photo album
+                    //                    [self writeExportedVideoToAssetsLibrary:exportVideoFile];
+                });
+                
+                break;
+            }
+            case AVAssetExportSessionStatusFailed:
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    // Close timer
+                   compelete(NO);
+                });
+                
+                NSLog(@"Export failed: %@", [[_exportSession error] localizedDescription]);
+                
+                break;
+            }
+            case AVAssetExportSessionStatusCancelled:
+            {
+                NSLog(@"Export canceled");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    // Close timer
+                    compelete(NO);
+                });
+                break;
+            }
+            case AVAssetExportSessionStatusWaiting:
+            {
+                NSLog(@"Export Waiting");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    // Close timer
+                    compelete(NO);
+                });
+                break;
+            }
+            case AVAssetExportSessionStatusExporting:
+            {
+                NSLog(@"Export Exporting");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    // Close timer
+                    compelete(NO);
+                });
+                break;
+            }
+            default:
+                break;
+        }
+        
+        _exportSession = nil;
+        
+ 
+    }];
+}
+
 
 /**
  *  通过滤镜名获取滤镜对象

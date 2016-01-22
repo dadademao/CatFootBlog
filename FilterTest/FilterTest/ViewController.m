@@ -27,6 +27,7 @@
 
 
 
+
 - (IBAction)photoBtnClick:(id)sender;
 - (IBAction)videoBtnClick:(id)sender;
 
@@ -43,7 +44,7 @@
 
     self.inputPath = [[NSBundle mainBundle] pathForResource:@"7a01dff8fb9bd3c1650e2711cee022fc" ofType:@"mp4"];
     self.inputImage = [UIImage imageNamed:@"46.pic.jpg"];
-    self.outputPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Movie.mov"];
+    self.outputPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Movie.m4v"];
 
     
     self.layer = [[AVPlayerLayer alloc] init];
@@ -62,7 +63,8 @@
     self.activityView.frame = CGRectMake(0, 0, 88, 88);
     self.activityView.center = self.view.center;
     [self.view addSubview:self.activityView];
-    
+    [self.activityView setHidesWhenStopped:YES];
+
     
 }
 
@@ -106,15 +108,19 @@
 - (IBAction)segementSelect:(id)sender {
     UISegmentedControl *segment = sender;
     __unsafe_unretained typeof(self) weakSelf = self;
-    
+      NSDate *date = [NSDate date];
     if (self.isVideo) {
         switch (segment.selectedSegmentIndex) {
             case 0: {
                 [self.player pause];
                 [self.activityView startAnimating];
+              
                 [[AddFilterToImageOrVoideo shareManager] filteringVideoWithsourcePath:self.inputPath andExportPath:self.outputPath withFilterType:Sharpen compelete:^(BOOL result) {
                     [weakSelf videoBtnClick:nil];
                     [weakSelf.activityView stopAnimating];
+                    NSDate *date2 = [NSDate date];
+                    NSTimeInterval time = [date2 timeIntervalSinceDate:date];
+                    NSLog(@"用了%lf秒",time);
                 }];
             }
                 
@@ -125,6 +131,9 @@
                 [[AddFilterToImageOrVoideo shareManager] filteringVideoWithsourcePath:self.inputPath andExportPath:self.outputPath withFilterType:ToneCurve compelete:^(BOOL result) {
                     [weakSelf videoBtnClick:nil];
                     [weakSelf.activityView stopAnimating];
+                    NSDate *date2 = [NSDate date];
+                    NSTimeInterval time = [date2 timeIntervalSinceDate:date];
+                    NSLog(@"用了%lf秒",time);
                 }];
             }
                 
@@ -135,6 +144,9 @@
                 [[AddFilterToImageOrVoideo shareManager] filteringVideoWithsourcePath:self.inputPath andExportPath:self.outputPath withFilterType:MissEtikate compelete:^(BOOL result) {
                     [weakSelf videoBtnClick:nil];
                     [weakSelf.activityView stopAnimating];
+                    NSDate *date2 = [NSDate date];
+                    NSTimeInterval time = [date2 timeIntervalSinceDate:date];
+                    NSLog(@"用了%lf秒",time);
                 }];
             }
                 
@@ -145,6 +157,9 @@
                 [[AddFilterToImageOrVoideo shareManager] filteringVideoWithsourcePath:self.inputPath andExportPath:self.outputPath withFilterType:Amatorka compelete:^(BOOL result) {
                     [weakSelf videoBtnClick:nil];
                     [weakSelf.activityView stopAnimating];
+                    NSDate *date2 = [NSDate date];
+                    NSTimeInterval time = [date2 timeIntervalSinceDate:date];
+                    NSLog(@"用了%lf秒",time);
                 }];
             }
                 
@@ -155,6 +170,9 @@
                 [[AddFilterToImageOrVoideo shareManager] filteringVideoWithsourcePath:self.inputPath andExportPath:self.outputPath withFilterType:SoftElegance compelete:^(BOOL result) {
                     [weakSelf videoBtnClick:nil];
                     [weakSelf.activityView stopAnimating];
+                    NSDate *date2 = [NSDate date];
+                    NSTimeInterval time = [date2 timeIntervalSinceDate:date];
+                    NSLog(@"用了%lf秒",time);
                 }];
             }
                 
@@ -209,4 +227,6 @@
     }
 
 }
+
+
 @end
