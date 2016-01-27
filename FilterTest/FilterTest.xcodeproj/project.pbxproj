@@ -206,6 +206,7 @@
 		F7610DDD1C4E4E98009B8D91 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7610DDB1C4E4E98009B8D91 /* LaunchScreen.storyboard */; };
 		F7610DE81C4E4E98009B8D91 /* FilterTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7610DE71C4E4E98009B8D91 /* FilterTestTests.m */; };
 		F7610DF31C4E4E98009B8D91 /* FilterTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F7610DF21C4E4E98009B8D91 /* FilterTestUITests.m */; };
+		F7B2A2951C58BC70009C109F /* APLEAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B2A2941C58BC70009C109F /* APLEAGLView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -623,6 +624,8 @@
 		F7610DEE1C4E4E98009B8D91 /* FilterTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FilterTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7610DF21C4E4E98009B8D91 /* FilterTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterTestUITests.m; sourceTree = "<group>"; };
 		F7610DF41C4E4E98009B8D91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F7B2A2931C58BC70009C109F /* APLEAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLEAGLView.h; sourceTree = "<group>"; };
+		F7B2A2941C58BC70009C109F /* APLEAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLEAGLView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1069,6 +1072,8 @@
 				F7610DDE1C4E4E98009B8D91 /* Info.plist */,
 				F723BA911C51D36A007252F7 /* 46.pic.jpg */,
 				F7610DCD1C4E4E98009B8D91 /* Supporting Files */,
+				F7B2A2931C58BC70009C109F /* APLEAGLView.h */,
+				F7B2A2941C58BC70009C109F /* APLEAGLView.m */,
 				F723BA9B1C52006B007252F7 /* AddFilterToImageOrVoideo.h */,
 				F723BA9C1C52006B007252F7 /* AddFilterToImageOrVoideo.m */,
 			);
@@ -1373,6 +1378,7 @@
 				F723BA0A1C508006007252F7 /* GPUImageHistogramEqualizationFilter.m in Sources */,
 				F723BA561C508006007252F7 /* GPUImageSwirlFilter.m in Sources */,
 				F723BA061C508006007252F7 /* GPUImageHarrisCornerDetectionFilter.m in Sources */,
+				F7B2A2951C58BC70009C109F /* APLEAGLView.m in Sources */,
 				F723B9D91C508006007252F7 /* GPUImageBoxBlurFilter.m in Sources */,
 				F723BA4A1C508006007252F7 /* GPUImageSingleComponentGaussianBlurFilter.m in Sources */,
 				F723BA201C508006007252F7 /* GPUImageLuminosity.m in Sources */,

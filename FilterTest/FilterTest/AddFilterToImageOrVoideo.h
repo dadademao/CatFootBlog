@@ -9,6 +9,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "GPUImage.h"
+
 /**
  *  滤镜种类
  */
@@ -81,5 +83,12 @@ typedef void(^compeleteFiltering)(BOOL result);
  */
 - (void) filteringVideoWithsourcePath:(NSString *)sourcePath andExportPath:(NSString *)exportPath withFilterType:(FilterType)type compelete:(compeleteFiltering)complete ;
 
-
+/**
+ *  实时滤镜效果
+ *
+ *  @param sourcePath 视频源路径
+ *  @param view       输出视图
+ *  @param type       滤镜类型
+ */
+- (void) filteringVideoWithSourcePath:(NSString *)sourcePath andPresentView:(GPUImageView *)view withFilterType:(FilterType)type;
 @end

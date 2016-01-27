@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ucb-KY-dEM">
-                                <rect key="frame" x="20" y="20" width="276" height="29"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ucb-KY-dEM">
+                                <rect key="frame" x="16" y="20" width="284" height="29"/>
                                 <segments>
                                     <segment title="Sharpen"/>
                                     <segment title="ToneCurve"/>
@@ -42,18 +42,34 @@
                                     <action selector="videoBtnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rF7-fo-EhN"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="48Q-pZ-OT1">
-                                <rect key="frame" x="57" y="501" width="30" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="48Q-pZ-OT1">
+                                <rect key="frame" x="53" y="501" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="12B-s2-vb6"/>
+                                    <constraint firstAttribute="width" constant="30" id="2DM-mg-lYg"/>
+                                </constraints>
                                 <state key="normal" title="照片"/>
                                 <connections>
                                     <action selector="photoBtnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9NO-vl-k7k"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="whw-Hc-7rH">
+                                <rect key="frame" x="128" y="417" width="60" height="30"/>
+                                <state key="normal" title="实时滤镜"/>
+                                <connections>
+                                    <action selector="timerFilterBtnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1xh-AA-f3s"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="ucb-KY-dEM" secondAttribute="trailing" constant="4" id="44C-TI-2UK"/>
+                            <constraint firstItem="ucb-KY-dEM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="NoX-NX-Z92"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="48Q-pZ-OT1" secondAttribute="bottom" constant="37" id="Uxk-2A-ilR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="BDb-cb-JhW" secondAttribute="trailing" constant="63" id="YXV-8J-jej"/>
+                            <constraint firstItem="48Q-pZ-OT1" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="37" id="eEk-z5-xUV"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="BDb-cb-JhW" secondAttribute="bottom" constant="37" id="jTT-6o-wot"/>
+                            <constraint firstItem="ucb-KY-dEM" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="tAN-9A-6xf"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

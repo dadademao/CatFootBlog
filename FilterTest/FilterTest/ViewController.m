@@ -10,6 +10,13 @@
 #import "GPUImage.h"
 #import <AVFoundation/AVFoundation.h>
 #import "AddFilterToImageOrVoideo.h"
+#import "APLEAGLView.h"
+typedef NS_ENUM(NSUInteger, FilterUseType) {
+    Image = 0, //图片
+    Video ,     //视频
+    TimerVideo, //实时滤镜
+};
+
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segement;/**< 选择按钮*/
@@ -22,14 +29,15 @@
 @property (strong, nonatomic) AVPlayerLayer *layer;     //展示视频控件
 @property (strong, nonatomic) NSString *inputPath;      //视频输入路径
 @property (strong, nonatomic) UIImage *inputImage;      //原始图片
-@property (assign, nonatomic) BOOL isVideo;             //判断是否是图片
+@property (assign, nonatomic) FilterUseType useType;     //判断是否是图片
 @property (strong, nonatomic) UIActivityIndicatorView *activityView;    //小菊花
 
-
+@property (strong, nonatomic) GPUImageView *timerView;    //实时滤镜;
 
 
 - (IBAction)photoBtnClick:(id)sender;
 - (IBAction)videoBtnClick:(id)sender;
+- (IBAction)timerFilterBtnClick:(id)sender;
 
 
 
@@ -41,7 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-
+    
     self.inputPath = [[NSBundle mainBundle] pathForResource:@"7a01dff8fb9bd3c1650e2711cee022fc" ofType:@"mp4"];
     self.inputImage = [UIImage imageNamed:@"46.pic.jpg"];
     self.outputPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Movie.m4v"];
@@ -58,16 +66,22 @@
     self.player = [[AVPlayer alloc] init];
     self.layer.player = self.player;
 
-    self.isVideo = NO;
+    self.useType = Image;
     self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite]; ;
     self.activityView.frame = CGRectMake(0, 0, 88, 88);
     self.activityView.center = self.view.center;
     [self.view addSubview:self.activityView];
     [self.activityView setHidesWhenStopped:YES];
 
-    
+    self.timerView = [[GPUImageView alloc] initWithFrame:self.view.frame];
+    [self.view insertSubview:self.timerView atIndex:0];
+    self.timerView.hidden = YES;
 }
 
+
+- (void) initTimerView {
+    
+}
 
 
 
@@ -86,22 +100,32 @@
 
 
 - (IBAction)photoBtnClick:(id)sender {
-    self.isVideo = NO;
+    self.useType = Image;
     [self.player pause];
     self.layer.hidden = YES;
     self.imageView.hidden = NO;
-    
+    self.timerView.hidden = YES;
+
 }
 
 - (IBAction)videoBtnClick:(id)sender {
-    self.isVideo = YES;
+    self.useType = Video;
     self.layer.hidden = NO;
     AVAsset *assert  = [AVAsset assetWithURL:[NSURL fileURLWithPath:self.outputPath]];
     AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:assert];
     [_player replaceCurrentItemWithPlayerItem:playerItem];
     self.imageView.hidden = YES;
+    self.timerView.hidden = YES;
     [_player play];
     
+}
+
+- (IBAction)timerFilterBtnClick:(id)sender {
+    self.useType = TimerVideo;
+    self.layer.hidden = YES;
+    [self.player pause];
+    self.imageView.hidden = YES;
+    self.timerView.hidden = NO;
 }
 
 
@@ -109,7 +133,7 @@
     UISegmentedControl *segment = sender;
     __unsafe_unretained typeof(self) weakSelf = self;
       NSDate *date = [NSDate date];
-    if (self.isVideo) {
+    if (self.useType == Video) {
         switch (segment.selectedSegmentIndex) {
             case 0: {
                 [self.player pause];
@@ -182,7 +206,7 @@
                 break;
         }
         
-    } else {
+    } else if (self.useType == Image){
         
         switch (segment.selectedSegmentIndex) {
             case 0: {
@@ -224,9 +248,42 @@
                 break;
         }
     
+    } else {
+        switch (segment.selectedSegmentIndex) {
+            case 0: {
+                [[AddFilterToImageOrVoideo shareManager] filteringVideoWithSourcePath:self.inputPath andPresentView:self.timerView withFilterType:Sharpen];
+               
+            }
+                
+                break;
+            case 1: {
+                [[AddFilterToImageOrVoideo shareManager] filteringVideoWithSourcePath:self.inputPath andPresentView:self.timerView withFilterType:ToneCurve];
+            }
+                
+                break;
+            case 2: {
+             [[AddFilterToImageOrVoideo shareManager] filteringVideoWithSourcePath:self.inputPath andPresentView:self.timerView withFilterType:MissEtikate];
+            }
+                
+                break;
+            case 3: {
+             [[AddFilterToImageOrVoideo shareManager] filteringVideoWithSourcePath:self.inputPath andPresentView:self.timerView withFilterType:Amatorka];
+            }
+                
+                break;
+            case 4: {
+                [[AddFilterToImageOrVoideo shareManager] filteringVideoWithSourcePath:self.inputPath andPresentView:self.timerView withFilterType:SoftElegance];
+            }
+                
+                break;
+            default:
+                break;
+        }
+
     }
 
 }
+
 
 
 @end

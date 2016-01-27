@@ -6,32 +6,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FilterTest/AddFilterToImageOrVoideo.m"
-            timestampString = "475151170.116441"
+            filePath = "FilterTest/ViewController.m"
+            timestampString = "475587291.315961"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "-filteringVideoWithsourcePath:andExportPath:withFilterType:compelete:"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
+            landmarkName = "-segementSelect:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FilterTest/AddFilterToImageOrVoideo.m"
-            timestampString = "475151170.116441"
+            timestampString = "475587342.691253"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "-filteringVideoWithsourcePath:andExportPath:withFilterType:compelete:"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "-filteringVideoWithSourcePath:andPresentView:withFilterType:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

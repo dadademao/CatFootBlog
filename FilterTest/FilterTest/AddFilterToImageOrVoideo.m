@@ -7,7 +7,6 @@
 //
 
 #import "AddFilterToImageOrVoideo.h"
-#import "GPUImage.h"
 @implementation AddFilterToImageOrVoideo {
     GPUImageMovie *moviefile;
     GPUImageMovieWriter *videoCamera;
@@ -132,7 +131,54 @@
 
 }
 
+/**
+ *  实时滤镜效果
+ *
+ *  @param sourcePath 视频源路径
+ *  @param view       输出视图
+ *  @param type       滤镜类型
+ */
+- (void) filteringVideoWithSourcePath:(NSString *)sourcePath andPresentView:(GPUImageView *)view withFilterType:(FilterType)type {
+    moviefile = [[GPUImageMovie alloc] initWithURL:[NSURL fileURLWithPath:sourcePath]];
+    moviefile.runBenchmark = YES;
+    moviefile.playAtActualSpeed = NO;
+    id stillImageFilter = [self getGPUImageFilterByType:type];
+    [moviefile addTarget:stillImageFilter];
+    [stillImageFilter addTarget:view];
+    [moviefile startProcessing];
+//
+//    NSString *pathToMovie = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Movie.m4v"];
+//    unlink([pathToMovie UTF8String]); // If a file already exists, AVAssetWriter won't let you record new frames, so delete the old movie
+//    NSURL *movieURL = [NSURL fileURLWithPath:pathToMovie];
+//    
+//    videoCamera = [[GPUImageMovieWriter alloc] initWithMovieURL:movieURL size:CGSizeMake(640.0, 480.0)];
+//    [stillImageFilter addTarget:videoCamera];
+//    
+//    // Configure this for video from the movie file, where we want to preserve all video frames and audio samples
+//    videoCamera.shouldPassthroughAudio = YES;
+//    moviefile.audioEncodingTarget = videoCamera;
+//    [moviefile enableSynchronizedEncodingUsingMovieWriter:videoCamera];
+//    
+//    [videoCamera startRecording];
+//    [moviefile startProcessing];
+// 
+//    __unsafe_unretained typeof(videoCamera) weakCamera = videoCamera;
+//    [videoCamera setCompletionBlock:^{
+//        [stillImageFilter removeTarget:weakCamera];
+//        [weakCamera finishRecording];
+//
+//    }];
 
+
+}
+
+/**
+ *  视频通过滤镜后内容被放大，需要进行压缩
+ *
+ *  @param inputVideoURL   传入需要压缩的视频路径
+ *  @param exportVideoFile 传出压缩后视频路径
+ *  @param compelete       完成
+ */
 - (void) compressVideoToMP4WithInputUrl:(NSURL *)inputVideoURL outPutFiled:(NSString *)exportVideoFile compelete:(compeleteFiltering)compelete {
     if (!inputVideoURL || ![inputVideoURL isFileURL] || !exportVideoFile || [exportVideoFile isEqualToString:@""])
     {
